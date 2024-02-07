@@ -4,5 +4,5 @@
 编写原因:懒得购买云存储服务，但是想分离出一个单独的文件读写服务，但是又懒得搭minio之类的中间件
 
 - 在配置文件.env中，可以修改服务的ip/port/文件下载接口/文件存储目录路径
-- 通过访问`http://{ip}:{port}/{文件下载接口}/{filename}`来访问该服务所在服务器的本地文件即`./{文件存储目录路径}/{filename}`
-- 通过`POST http://{ip}:{port}/file`上传文件
+- 通过访问`http://{ip}:{port}/{download_route}/{filename}`来访问该服务所在服务器的本地文件即`./{file_path}/{filename}`
+- 通过`POST http://{ip}:{port}/{upload_route}`上传文件
