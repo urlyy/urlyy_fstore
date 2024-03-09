@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_files as fs;
 use actix_web::{get, post, web, App, Error, HttpResponse, HttpServer, Responder};
 use dotenvy::dotenv;
@@ -35,16 +36,18 @@ async fn hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("启动");
     dotenv().ok();
     let file_path = env::var("file_path").unwrap();
     let upload_route = env::var("upload_route").unwrap();
     let download_route = env::var("download_route").unwrap();
+    std::fs::create_dir_all(&file_path)?;
     let ip = env::var("ip").unwrap();
     let port: u16 = env::var("port").unwrap().parse().unwrap();
-    std::fs::create_dir_all(&file_path)?;
+    println!("文件服务启动,http://{ip}:{port}");
     HttpServer::new(move || {
+        let cors = Cors::permissive();
         App::new()
+            .wrap(cors)
             .app_data(TempFileConfig::default().directory(&file_path))
             .service(
                 fs::Files::new(download_route.as_str(), &file_path), // .show_files_listing()
